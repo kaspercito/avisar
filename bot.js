@@ -4,23 +4,31 @@ const { Client, GatewayIntentBits } = require("discord.js");
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMembers,
     GatewayIntentBits.DirectMessages,
+    GatewayIntentBits.MessageContent
   ],
 });
 
-client.once("ready", () => {
+client.once("ready", async () => {
   console.log(`Bot conectado como ${client.user.tag}`);
-});
+  
+  const userId = "USER_ID"; // Reemplaza con la ID del usuario que recibirá el mensaje
 
-client.on("guildMemberAdd", async (member) => {
-  try {
-    await member.send(
-      `¡Hola ${member.user.username}! 👋\n\nPara mejorar tu experiencia en nuestro servidor de Minecraft, instala el texture pack oficial: [LINK_DEL_TEXTURE_PACK] 🎨`
-    );
-  } catch (error) {
-    console.error(`Error al enviar mensaje a ${member.user.tag}:`, error);
-  }
+  setTimeout(async () => {
+    try {
+      const user = await client.users.fetch(userId);
+      if (user) {
+        await user.send(
+          `¡Hola! 👋\n\nPlanta, recuerda instalar el texture pack: [https://discord.com/channels/@me/1046189182181179483/1340175960552505394] 🎨`
+        );
+        console.log(`Mensaje enviado a ${user.tag}`);
+      } else {
+        console.log("No se encontró al usuario.");
+      }
+    } catch (error) {
+      console.error(`Error al enviar mensaje:`, error);
+    }
+  }, 10 * 60 * 1000); // 10 minutos en milisegundos
 });
 
 client.login(process.env.TOKEN);

@@ -12,7 +12,7 @@ const client = new Client({
 client.once("ready", async () => {
   console.log(`Bot conectado como ${client.user.tag}`);
   
-  const userId = "USER_ID"; // Reemplaza con la ID del usuario que recibirá el mensaje
+  const userId = "696592229166350347"; // Reemplaza con la ID del usuario que recibirá el mensaje
 
   setTimeout(async () => {
     try {

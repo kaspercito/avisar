@@ -14,30 +14,13 @@ client.once("ready", async () => {
 
   const userId = "696592229166350347"; // Reemplaza con la ID del usuario que recibirá el mensaje
 
-  // Obtener la hora actual en Uruguay (GMT-3)
-  const now = new Date();
-  const nowUtc = now.getTime() + now.getTimezoneOffset() * 60000; // Convertir a UTC
-  const uruguayTime = new Date(nowUtc + -3 * 3600000); // Ajustar a GMT-3
-
-  // Configurar la hora de envío (10:30 AM)
-  const sendTime = new Date(uruguayTime);
-  sendTime.setHours(10, 30, 0, 0); // 10:30 AM exacto
-
-  // Si ya pasó la hora de hoy, programarlo para mañana
-  if (uruguayTime > sendTime) {
-    sendTime.setDate(sendTime.getDate() + 1);
-  }
-
-  // Calcular tiempo restante en milisegundos
-  const timeUntilSend = sendTime - uruguayTime;
-  console.log(`El mensaje se enviará a las 10:30 AM (Uruguay). Falta: ${(timeUntilSend / 60000).toFixed(2)} minutos`);
-
-  setTimeout(async () => {
+  // Función para enviar el mensaje
+  const enviarMensaje = async () => {
     try {
       const user = await client.users.fetch(userId);
       if (user) {
         await user.send(
-          `¡Hola! 👋\n\nPlanta, POR FAVOR recuerda instalar el texture pack: [https://discord.com/channels/@me/1046189182181179483/1340175960552505394] 🎨`
+          `¡Hola Planta! 👋\n\nRECUERDA INSTALAR EL TEXTURE PACK jiji, para que no te olvides te aviso cada 5 minutos: [https://discord.com/channels/@me/1046189182181179483/1340175960552505394] 🎨`
         );
         console.log(`Mensaje enviado a ${user.tag}`);
       } else {
@@ -46,7 +29,13 @@ client.once("ready", async () => {
     } catch (error) {
       console.error(`Error al enviar mensaje:`, error);
     }
-  }, timeUntilSend); // Espera hasta la hora exacta
+  };
+
+  // Llamar a la función de mensaje inmediatamente
+  enviarMensaje();
+
+  // Configurar el intervalo para enviar el mensaje cada 5 minutos (300,000 milisegundos)
+  setInterval(enviarMensaje, 5 * 60 * 1000); // 5 minutos en milisegundos
 });
 
 client.login(process.env.TOKEN);
